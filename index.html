@@ -61,7 +61,7 @@ function run(c){const p=c.trim().split(/\s+/),a=p.slice(1).join(' '),b=(p[0]||''
  if(b==='echo')return a;
  if(b==='cd')return'';
  if(W[b]!==undefined){const v=W[b];return typeof v==='function'?v(a):v;}
- if(TOOLS.includes(b))return a?'Starting '+b+' ...\n[+] target: '+a+'\n[+] running modules...\n[+] complete (simulated)':b+' — usage: '+b+' <target> [options]';
+ if(TOOLS.join(' ').includes(b))return a?'Starting '+b+' ...\n[+] target: '+a+'\n[+] running modules...\n[+] complete (simulated)':b+' — usage: '+b+' <target> [options]';
  return 'bash: '+b+': command not found';}
 let h=[],k=-1;
 i.addEventListener('keydown',e=>{
