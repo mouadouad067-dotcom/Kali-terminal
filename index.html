@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="ar" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Kali Terminal</title>
+<style>
+body{background:#0c0c0f;color:#c8f7c5;font:13px monospace;margin:0;height:100vh;overflow:hidden}
+#b{height:28px;background:#14141c;display:flex;align-items:center;gap:6px;padding:0 10px;border-bottom:1px solid #22222e}
+.d{width:10px;height:10px;border-radius:50%}
+#t{height:calc(100% - 28px);padding:10px;overflow:auto;white-space:pre-wrap}
+#o{line-height:1.45}.c{color:#3bff6e}
+#l{display:flex}#p{color:#3bff6e;font-weight:bold}
+#i{flex:1;background:0;border:0;outline:0;color:#c8f7c5;font:inherit}
+</style></head><body>
+<div id="b"><span class="d" style="background:#ff5f56"></span><span class="d" style="background:#ffbd2e"></span><span class="d" style="background:#27c93f"></span><span style="margin-left:8px;color:#8a8a99">root@kali: ~ — bash</span></div>
+<div id="t"><div id="o"></div><div id="l"><span id="p">root@kali:~# </span><input id="i" autocomplete="off" autofocus></div></div>
+<script>
+const o=document.getElementById('o'),i=document.getElementById('i'),t=document.getElementById('t');
+const NOW=new Date().toLocaleString();
+const TOOLS='ssh scp nc socat python python3 pip apt apt-get dpkg service systemctl sudo su chmod chown mkdir touch rm mv cp grep find locate tar zip unzip gzip base64 xxd md5sum sha256sum nano vim cat less head tail wc sort uniq file strings exiftool binwalk autopsy foremost volatility gdb objdump radare2 apktool jadx openssl gpg steghide hashid john hashcat hydra medusa crunch aircrack-ng airmon-ng airodump-ng reaver wifite kismet tcpdump wireshark ettercap bettercap arpspoof mitmproxy nmap masscan netdiscover arp-scan dnsenum dnsrecon nikto dirb gobuster wfuzz sqlmap wpscan whatweb burpsuite msfconsole msfvenom searchsploit exploitdb setoolkit theharvester sherlock maltego enum4linux smbclient crackmapexec impacket evil-winrm bloodhound responder ffuf nuclei amass wafw00f hping3 fping proxychains tor'.split(' ');
+const W={
+help:'Kali Terminal (simulation)\n- اكتب: tools (قائمة الأدوات)\n- جرب: nmap scanme.nmap.org · hydra · sqlmap · ifconfig · ls · ping 8.8.8.8',
+tools:'الأدوات المحاكاة:\n'+TOOLS.join(' '),
+ls:'Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos',
+pwd:'/root',whoami:'root',id:'uid=0(root) gid=0(root) groups=0(root)',hostname:'kali',
+date:()=>new Date().toString(),
+uname:'Linux kali 6.6.0-kali #1 SMP PREEMPT_DYNAMIC Kali 2024.1 x86_64 GNU/Linux',
+df:'Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1        50G   12G   36G  25% /',
+free:'              total        used        free\nMem:          3.8Gi       1.2Gi       1.9Gi\nSwap:         2.0Gi          0B       2.0Gi',
+ifconfig:'eth0: flags=4163<UP,BROADCAST,RUNNING>  mtu 1500\n        inet 192.168.1.42  netmask 255.255.255.0\n        ether 08:00:27:4e:66:a1',
+ip:'1: lo: 127.0.0.1/8\n2: eth0: 192.168.1.42/24',
+netstat:'Proto Local Address   Foreign Address  State\ntcp   0.0.0.0:22      0.0.0.0:*        LISTEN\ntcp   127.0.0.1:631   0.0.0.0:*        LISTEN',
+ps:'USER PID %CPU %MEM COMMAND\nroot   1  0.0  0.1 /sbin/init\nroot 812  0.0  0.3 xfce4-terminal',
+ping:a=>a?'PING '+a+' 56(84) bytes of data.\n64 bytes from '+a+': icmp_seq=1 ttl=56 time=11.4 ms\n64 bytes from '+a+': icmp_seq=2 ttl=56 time=11.8 ms\n\n--- '+a+' ping statistics ---\n2 packets transmitted, 2 received, 0% packet loss':'ping: usage error',
+traceroute:a=>a?'traceroute to '+a+', 30 hops max\n 1  _gateway (192.168.1.1)  1.2 ms\n 2  10.0.0.1 (10.0.0.1)  5.6 ms\n 3  '+a+'  12.3 ms':'Usage: traceroute <host>',
+nmap:a=>a?'Starting Nmap 7.94SVN at '+NOW+'\nNmap scan report for '+a+'\nHost is up (0.011s latency).\nPORT     STATE SERVICE\n22/tcp   open  ssh\n80/tcp   open  http\n443/tcp  open  https\n3306/tcp open  mysql\n\nNmap done: 1 IP scanned in 3.12 seconds':'Usage: nmap <target> [options]',
+hydra:'Hydra v9.5\nSyntax: hydra [[-l LOGIN|-L FILE] [-p PASS|-P FILE]] server service\nExamples:\n hydra -l user -P pass.txt ssh://192.168.1.10\n hydra -L users.txt -p pass ftp://target',
+sqlmap:'       __H__\n ___ ___[.]_____ ___ ___\n[INFO] testing connection to target\n[INFO] GET parameter id appears to be MySQL injectable\n[INFO] fetching database names\n[*] website_db\n[*] mysql',
+msfconsole:'  =[ metasploit v6.3 ]\n+ -- --=[ 2415 exploits - 1235 auxiliary ]\n+ -- --=[ 1432 payloads ]\nmsf6 > ',
+msfvenom:'Payload size: 355 bytes\nFinal size of exe file: 7168 bytes\nSaved as: shell.exe',
+john:'John the Ripper 1.9.0-jumbo\nUsage: john [options] password-files',
+hashcat:'hashcat (v6.2.6)\nUsage: hashcat [options] hashfile wordlist',
+'aircrack-ng':'Aircrack-ng 1.7\nUsage: aircrack-ng [options] capture.cap',
+tcpdump:'tcpdump: listening on eth0, link-type EN10MB\n15:05:01 IP 192.168.1.42.54321 > 93.184.216.34.80: Flags [S]',
+nikto:a=>'- Nikto v2.5.0\n+ Target: '+(a||'host')+'\n+ Server: nginx\n+ /admin/ found\n+ 2 hosts tested',
+gobuster:a=>'Gobuster v3.6\nUrl: http://'+(a||'target')+'\n/admin  Status: 301\n/login  Status: 200\nFinished',
+dirb:a=>'DIRB v2.22\nURL_BASE: http://'+(a||'target')+'/\n+ http://'+(a||'target')+'/index.html (200)\n+ robots.txt (200)',
+wpscan:a=>'WordPress Scanner 3.8\nURL: https://'+(a||'target')+'\nWordPress version 6.4 identified',
+searchsploit:a=>'Exploit Title | Path\n'+(a||'Apache')+' RCE | linux/remote/50383.py\n'+(a||'Apache')+' DoS | dos/12345.c',
+theharvester:a=>'[*] Emails found: 3\nadmin@'+(a||'target')+'\ninfo@'+(a||'target')+'\n[*] Hosts found: 2',
+setoolkit:'  Select from the menu:\n  1) Social-Engineering Attacks\n  2) Penetration Testing (Fast-Track)\n  3) Third Party Modules',
+enum4linux:a=>'[+] Enumerating users on '+(a||'target')+'\nuser:[Administrator]\nuser:[Guest]\n[+] Done',
+crackmapexec:a=>'SMB  '+(a||'target')+'  445  HOST  [*] Windows Server\nSMB  '+(a||'target')+'  445  HOST  [+] Domain: WORKGROUP',
+apt:'Reading package lists... Done\nBuilding dependency tree... Done\n0 upgraded, 0 newly installed',
+python3:'Python 3.11.6 (main, Oct 2024) [GCC 13.2.0] on linux',
+sudo:'[sudo] password for root: \nsudo: 1 incorrect password attempt',
+curl:'<html><head><title>Example Domain</title></head><body><h1>Example Domain</h1></body></html>'
+};
+function esc(s){return String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
+function pr(h){const d=document.createElement('div');d.innerHTML=h;o.appendChild(d);t.scrollTop=t.scrollHeight;}
+function run(c){const p=c.trim().split(/\s+/),a=p.slice(1).join(' '),b=(p[0]||'').toLowerCase();
+ if(!b)return'';
+ if(b==='clear'){o.innerHTML='';return'';}
+ if(b==='echo')return a;
+ if(b==='cd')return'';
+ if(W[b]!==undefined){const v=W[b];return typeof v==='function'?v(a):v;}
+ if(TOOLS.includes(b))return a?'Starting '+b+' ...\n[+] target: '+a+'\n[+] running modules...\n[+] complete (simulated)':b+' — usage: '+b+' <target> [options]';
+ return 'bash: '+b+': command not found';}
+let h=[],k=-1;
+i.addEventListener('keydown',e=>{
+ if(e.key==='Enter'){const c=i.value;i.value='';if(c.trim()){h.push(c);k=h.length;}
+  pr('<span class="c">root@kali:~# '+esc(c)+'</span>');
+  const r=run(c);if(r)pr('<pre style="margin:0;font:inherit">'+esc(r)+'</pre>');}
+ else if(e.key==='ArrowUp'){if(k>0){k--;i.value=h[k];}}
+ else if(e.key==='ArrowDown'){if(k<h.length-1){k++;i.value=h[k];}else{k=h.length;i.value='';}}
+});
+t.addEventListener('click',()=>i.focus());
+pr('<span style="color:#5c6b5c">Kali Terminal — اكتب help أو tools</span>');
+</script></body></html>
